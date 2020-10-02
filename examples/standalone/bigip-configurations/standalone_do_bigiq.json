@@ -6,7 +6,7 @@
             "provision.extramb": 500,
             "restjavad.useextramb": true
         },
-        "hostname": "{{ HOST_NAME }}",
+        "hostname": "{{ HOST_NAME }}.local",
         "myDns": {
             "class": "DNS",
             "nameServers": [

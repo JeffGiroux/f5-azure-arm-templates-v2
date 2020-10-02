@@ -27,7 +27,7 @@
         "mySystem": {
             "autoPhonehome": false,
             "class": "System",
-            "hostname": "{{ HOST_NAME }}"
+            "hostname": "{{ HOST_NAME }}.local"
         }
     },
     "async": true,
