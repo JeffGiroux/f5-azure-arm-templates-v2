@@ -1,6 +1,6 @@
 {
 	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
-	"contentVersion": "1.0.0.0",
+	"contentVersion": "1.2.0.0",
 	"parameters": {
 		"templateBaseUrl": {
 			"defaultValue": "https://cdn.f5.com/product/cloudsolutions/",
@@ -10,7 +10,7 @@
 			"type": "string"
 		},
 		"artifactLocation": {
-			"defaultValue": "[concat('f5-azure-arm-templates/v', deployment().properties.template.contentVersion, '/examples/')]",
+			"defaultValue": "[concat('f5-azure-arm-templates-v2/v', deployment().properties.template.contentVersion, '/examples/')]",
 			"metadata": {
 				"description": "The directory, relative to the templateBaseUrl, where the modules folder is located."
 			},
@@ -51,7 +51,7 @@
 			"type": "string"
 		},
 		"runtimeConfig": {
-			"defaultValue": "https://github.com/F5Networks/f5-azure-arm-templates-v2/blob/master/examples/autoscale/bigip-configurations/runtime-init-conf-bigiq.yaml",
+			"defaultValue": "https://raw.githubusercontent.com/F5Networks/f5-azure-arm-templates-v2/master/examples/autoscale/bigip-configurations/runtime-init-conf-bigiq.yaml",
 			"metadata": {
 				"description": "Supply a URL to the bigip-runtime-init configuration file in YAML or JSON format, or an escaped JSON string to use for f5-bigip-runtime-init configuration."
 			},
@@ -151,10 +151,7 @@
 		"secretName": "mySecret",
 		"userAssignedIdentityName": "[concat(variables('uniqueString'), '-secretIdentity')]",
 
-		"appNsg": "[variables('uniqueString')]",
-		"mgmtNsg": "[variables('uniqueString')]",
 		"numSubnets": 2,
-		"provisionPublicIPNetwork": true,
 		"restrictedSrcMgmtPort": "8443",
 		"virtualNetworkName": "[concat(variables('uniqueString'), '-vnet')]",
 		"vnetAddressPrefix": "10.0",
@@ -164,7 +161,10 @@
 		"internalLoadBalancerProbePort": "3456",
 		"internalSubnetId": "",
 		"loadBalancerRulePorts": ["80","443"],
-		"numberPublicAppIPAddresses": 1,
+		"nsg0": [{"destinationPortRanges":["22","8443"],"sourceAddressPrefix":"[parameters('restrictedSrcMgmtAddress')]"},{"destinationPortRanges":["80","443"],"sourceAddressPrefix":"*"}],
+		"nsg1": [{"destinationPortRanges":["80","443"],"sourceAddressPrefix":"*"}],
+		"nsg2": [],
+		"numberPublicExternalIPAddresses": 1,
 		"numberPublicMgmtIPAddresses": 0,
 
 		"provisionApp": "[not(empty(parameters('appContainer')))]",
@@ -188,7 +188,7 @@
 		"scaleOutThroughputThreshold": 20000000,
 		"scaleOutTimeWindow": 10,
 		"throughputMetricName": "Network In",
-		"vmScaleSetMaxCount": 4,
+		"vmScaleSetMaxCount": 10,
 		"vmScaleSetMinCount": 2,
 		"vmssName": "[concat(variables('uniqueString'), '-vmss')]",
 
@@ -234,12 +234,7 @@
 					"contentVersion": "[variables('contentVersion')]"
 				},
 				"parameters": {
-					"appNsg":{ "value": "[variables('appNsg')]" },
-					"mgmtNsg":{ "value": "[variables('mgmtNsg')]" },
 					"numSubnets":{ "value": "[variables('numSubnets')]" },
-					"provisionPublicIP":{ "value": "[variables('provisionPublicIPNetwork')]" },
-					"restrictedSrcMgmtAddress":{ "value": "[parameters('restrictedSrcMgmtAddress')]" },
-					"restrictedSrcMgmtPort":{ "value": "[variables('restrictedSrcMgmtPort')]" },
 					"virtualNetworkName":{ "value": "[variables('virtualNetworkName')]" },
 					"vnetAddressPrefix":{ "value": "[variables('vnetAddressPrefix')]" },					
 					"tagValues":{ "value": "[parameters('tagValues')]" }
@@ -266,7 +261,10 @@
 					"internalLoadBalancerProbePort":{ "value": "[variables('internalLoadBalancerProbePort')]" },
 					"internalSubnetId":{ "value": "[variables('internalSubnetId')]" },
 					"loadBalancerRulePorts":{ "value": "[variables('loadBalancerRulePorts')]" },
-					"numberPublicAppIPAddresses":{ "value": "[variables('numberPublicAppIPAddresses')]" },
+					"nsg0":{ "value": "[variables('nsg0')]" },
+					"nsg1":{ "value": "[variables('nsg1')]" },
+					"nsg2":{ "value": "[variables('nsg2')]" },
+					"numberPublicExternalIPAddresses":{ "value": "[variables('numberPublicExternalIPAddresses')]" },
 					"numberPublicMgmtIPAddresses":{ "value": "[variables('numberPublicMgmtIPAddresses')]" },
 					"tagValues":{ "value": "[parameters('tagValues')]" }
 				}
@@ -278,7 +276,8 @@
 			"apiVersion": "[variables('deploymentApiVersion')]",
 			"name": "appTemplate",
 			"dependsOn": [
-				"networkTemplate"
+				"networkTemplate",
+				"dagTemplate"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -291,8 +290,8 @@
 					"sshKey":{ "value": "[parameters('sshKey')]" },
 					"instanceName":{ "value": "[variables('appInstanceName')]" },
 					"instanceType":{ "value": "[variables('appInstanceType')]" },
-					"subnetId":{ "value": "[reference('networkTemplate').outputs.appSubnet.value]" },
-					"nsgId":{ "value": "[reference('networkTemplate').outputs.appNSG.value]" },
+					"subnetId":{ "value": "[reference('networkTemplate').outputs.subnets.value[1]]" },
+					"nsgId":{ "value": "[reference('dagTemplate').outputs.nsg1Id.value]" },
 					"appContainer":{ "value": "[parameters('appContainer')]" },
 					"cloudInitDeliveryLocation":{ "value": "[variables('cloudInitDeliveryLocation')]" },
 					"tagValues":{ "value": "[parameters('tagValues')]" }
@@ -327,7 +326,7 @@
 					"instanceHealthProbeID":{ "value": "[reference('dagTemplate').outputs.externalLoadBalancerProbesID.value[0]]" },
 					"instanceType":{ "value": "[variables('instanceType')]" },
 					"loadBalancerBackendAddressPoolsArray":{ "value": [{ "id": "[reference('dagTemplate').outputs.externalBackEndLoadBalancerID.value]" }] },
-					"nsgID":{ "value": "[reference('networkTemplate').outputs.mgmtNSG.value]" },
+					"nsgID":{ "value": "[reference('dagTemplate').outputs.nsg0Id.value]" },
 					"provisionPublicIP":{ "value": "[variables('provisionPublicIPBigip')]" },
 					"roleDefinitionId":{ "value": "[variables('roleDefinitionId')]" },
 					"runtimeConfig":{ "value": "[parameters('runtimeConfig')]" },
@@ -338,7 +337,7 @@
 					"scaleOutThroughputThreshold":{ "value": "[variables('scaleOutThroughputThreshold')]" },
 					"scaleOutTimeWindow":{ "value": "[variables('scaleOutTimeWindow')]" },
 					"sshKey":{ "value": "[parameters('sshKey')]" },
-					"subnetId":{ "value": "[reference('networkTemplate').outputs.mgmtSubnet.value]" },
+					"subnetId":{ "value": "[reference('networkTemplate').outputs.subnets.value[0]]" },
 					"tagValues":{ "value": "[parameters('tagValues')]" },
 					"throughputMetricName":{ "value": "[variables('throughputMetricName')]" },
 					"useAvailabilityZones":{ "value": "[parameters('useAvailabilityZones')]" },
@@ -392,7 +391,7 @@
 		"appPublicIps": {
 			"condition": "[variables('provisionApp')]",
             "type": "array",
-            "value": "[reference('dagTemplate').outputs.appIps.value]"
+            "value": "[reference('dagTemplate').outputs.externalIps.value]"
         },
 		"appPrivateIp": {
 			"condition": "[variables('provisionApp')]",
