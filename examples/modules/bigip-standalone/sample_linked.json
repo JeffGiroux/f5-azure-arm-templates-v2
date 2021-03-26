@@ -40,7 +40,7 @@
 						"value": "appDns"
 					},
 					"image": {
-						"value": "f5-networks:f5-big-ip-best:f5-bigip-virtual-edition-25m-best-hourly:15.1.002000"
+						"value": "f5-networks:f5-big-ip-best:f5-bigip-virtual-edition-25m-best-hourly:15.1.201000"
 					},
 					"instanceType": {
 						"value": "Standard_DS2_v2"
