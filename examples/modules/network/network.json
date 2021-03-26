@@ -218,7 +218,7 @@
                 }
             }
         ],
-        "networkApiVersion": "2019-11-01",
+        "networkApiVersion": "2019-11-01"
     },
     "resources": [
         {
@@ -289,19 +289,10 @@
             "type": "String",
             "value": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('appSecurityGroupName'))]"
         },
-        "appSubnet": {
-            "condition": "[greaterOrEquals(parameters('numSubnets'), 2)]",
-            "type": "String",
-            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), 'appSubnet')]"
-        },
         "mgmtNSG": {
             "condition": "[not(equals(parameters('mgmtNsg'), 'None'))]",
             "type": "String",
             "value": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('mgmtSecurityGroupName'))]"
-        },
-        "mgmtSubnet": {
-            "type": "String",
-            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), 'mgmtSubnet')]"
         },
         "subnets": {
             "condition": "[greaterOrEquals(parameters('numSubnets'), 1)]",
