@@ -259,7 +259,7 @@
             "apiVersion": "[variables('networkApiVersion')]",
             "dependsOn": [
                 "[variables('mgmtSecurityGroupName')]",
-                "[variables('appSecurityGroupName')]"
+                "[variables('appSecurityGroupName')]",
                 "routeTableLoop"
             ],
             "name": "[parameters('virtualNetworkName')]",
