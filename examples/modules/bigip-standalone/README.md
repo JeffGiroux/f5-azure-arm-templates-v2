@@ -1,9 +1,8 @@
 
 # Deploying BIG-IP Template
 
-[![Slack Status](https://f5cloudsolutions.herokuapp.com/badge.svg)](https://f5cloudsolutions.herokuapp.com)
-[![Releases](https://img.shields.io/github/release/f5networks/f5-azure-arm-templates.svg)](https://github.com/f5networks/f5-azure-arm-templates/releases)
-[![Issues](https://img.shields.io/github/issues/f5networks/f5-azure-arm-templates.svg)](https://github.com/f5networks/f5-azure-arm-templates/issues)
+[![Releases](https://img.shields.io/github/release/f5networks/f5-azure-arm-templates-v2.svg)](https://github.com/f5networks/f5-azure-arm-templates-v2/releases)
+[![Issues](https://img.shields.io/github/issues/f5networks/f5-azure-arm-templates-v2.svg)](https://github.com/f5networks/f5-azure-arm-templates-v2/issues)
 
 ## Contents
 
@@ -14,12 +13,6 @@
   - [Important Configuration Notes](#important-configuration-notes)
     - [Template Input Parameters](#template-input-parameters)
     - [Template Outputs](#template-outputs)
-  - [Getting Help](#getting-help)
-    - [Filing Issues](#filing-issues)
-  - [Copyright](#copyright)
-  - [License](#license)
-    - [Apache V2.0](#apache-v20)
-    - [Contributor License Agreement](#contributor-license-agreement)
 
 ## Introduction
 
@@ -27,7 +20,7 @@ This ARM template creates a BIG-IP standalone instance, creates an optional appl
 
 ## Prerequisites
 
- - F5-bigip-runtime-init configuration file required. See https://cdn.f5.com/product/cloudsolutions/f5-bigip-runtime-init/v0.9.0/dist/f5-bigip-runtime-init-0.9.0-1.gz.run for more details on F5-bigip-runtime-init SDK. See example userData.yaml in the repository.
+ - F5-bigip-runtime-init configuration file required. See https://github.com/F5Networks/f5-bigip-runtime-init for more details on F5-bigip-runtime-init SDK. See example runtime-init-conf.yaml in the repository.
  - Declarative Onboaring (DO) declaration: See example standalone_do_payg.json or standalone_do_bigiq.json in the repository.
  - AS3 declaration: See example standalone_a3.json in the repository.
  - Telemetry Streaming (TS) declaration if using custom metrics. See example standalone_ts.json in the repository.
@@ -49,7 +42,7 @@ This ARM template creates a BIG-IP standalone instance, creates an optional appl
 | appInsights | No | Valid values: empty value, an acceptable application insight component name. Creates application insight component with specified name. |
 | customEmail | No | Enter an array of email addresses to be notified when scale up or scale down occurs. For example: ['myemail@email.com','myemail2@email.com']. |
 | dnsLabel | Yes | Unique DNS Name for the Public IP address used to access the Virtual Machine and postfix resource names. |
-| image | Yes |  There are two acceptable formats: Enter the URN of the image to use in Azure marketplace, or enter the ID of the custom image. An example URN value: 'f5-networks:f5-big-ip-byol:f5-big-ltm-2slot-byol:15.1.002000'. You can find the URNs of F5 marketplace images in the README for this template or by running the command: ``az vm image list --output yaml --publisher f5-networks --all``. See [this documentation](https://clouddocs.f5.com/cloud/public/v1/azure/Azure_download.html) for information on creating a custom BIG-IP image. |
+| image | Yes |  There are two acceptable formats: Enter the URN of the image to use in Azure marketplace, or enter the ID of the custom image. An example URN value: 'f5-networks:f5-big-ip-byol:f5-big-ltm-2slot-byol:15.1.201000'. You can find the URNs of F5 marketplace images in the README for this template or by running the command: ``az vm image list --output yaml --publisher f5-networks --all``. See [this documentation](https://clouddocs.f5.com/cloud/public/v1/azure/Azure_download.html) for information on creating a custom BIG-IP image. |
 | instanceType | Yes | Enter a valid instance type. |
 | nsgId | No | Enter security group ID to use. Use default if you do not wish to apply an NSG policy. |
 | publicIPAddressId | No | Public IP address resource ID for the BIG-IP instance. |
@@ -210,37 +203,3 @@ This ARM template creates a BIG-IP standalone instance, creates an optional appl
     "persist": true
 }
 ```
-
-## Getting Help
-
-The example templates in this directory are intended to provide reference deployments of F5 BIG-IP Virtual Editions. Due to the heavy customization requirements of external cloud resources and BIG-IP configurations in these solutions, F5 does not provide technical support for deploying, customizing, or troubleshooting the templates themselves. However, the various underlying products and components used (for example: F5 BIG-IP Virtual Edition, Automation Toolchain extensions, and Cloud Failover Extension (CFE)) in the solutions located here are F5-supported and capable of being deployed with other orchestration tools. Read more about [Support Policies](https://www.f5.com/company/policies/support-policies). 
-
-### Filing Issues
-
-If you find an issue, we would love to hear about it.
-
-- Use the **Issues** link on the GitHub menu bar in this repository for items such as enhancement or feature requests and non-urgent bug fixes. Tell us as much as you can about what you found and how you found it.
-
-
-## Copyright
-
-Copyright 2014-2020 F5 Networks Inc.
-
-## License
-
-### Apache V2.0
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License [here](http://www.apache.org/licenses/LICENSE-2.0).
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and limitations
-under the License.
-
-### Contributor License Agreement
-
-Individuals or business entities who contribute to this project must have
-completed and submitted the F5 Contributor License Agreement.
