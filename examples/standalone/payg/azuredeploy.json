@@ -1,6 +1,6 @@
 {
 	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
-	"contentVersion": "1.0.0.0",
+	"contentVersion": "1.2.0.0",
 	"parameters": {
 		"templateBaseUrl": {
 			"defaultValue": "https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/",
@@ -51,7 +51,7 @@
 			"type": "string"
 		},
 		"runtimeConfig": {
-			"defaultValue": "https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/main/examples/standalone/bigip-configurations/runtime-init-conf.yaml",
+			"defaultValue": "https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/main/examples/standalone/bigip-configurations/runtime-init-conf-payg.yaml",
 			"metadata": {
 				"description": "Supply a URL to the bigip-runtime-init configuration file in YAML or JSON format, or an escaped JSON string to use for f5-bigip-runtime-init configuration."
 			},
@@ -127,7 +127,7 @@
 		"appInsights": "[concat(variables('uniqueString'), '-insights')]",
 		"appInsightsId": "[resourceId('Microsoft.Insights/components', variables('appInsights'))]",
 		"customEmail": [],
-		"image": "f5-networks:f5-big-ip-best:f5-bigip-virtual-edition-25m-best-hourly:15.1.004000",
+		"image": "f5-networks:f5-big-ip-best:f5-bigip-virtual-edition-25m-best-hourly:15.1.201000",
 		"instanceType": "Standard_DS3_v2",
 		"roleDefinitionId": "",
 		"vmName": "[concat(variables('uniqueString'), '-vm')]"

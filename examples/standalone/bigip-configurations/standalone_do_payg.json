@@ -1,11 +1,6 @@
 {
     "Common": {
         "class": "Tenant",
-        "dbvars": {
-            "class": "DbVariables",
-            "provision.extramb": 500,
-            "restjavad.useextramb": true
-        },
         "myDns": {
             "class": "DNS",
             "nameServers": [
