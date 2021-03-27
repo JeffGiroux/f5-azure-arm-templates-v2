@@ -24,7 +24,7 @@ The modules below create the following resources:
 
 - **Network**: This template creates Azure Virtual Networks, subnets, and the management Network Security Group.
 - **Application**: This template creates a generic example application for use when demonstrating live traffic through the BIG-IPs.
-- **PublicIp**: This template creates resources required to get traffic to the BIG-IP, including Azure Public IP Addresses.
+- **PublicIp**: This template creates resources required to get traffic to the BIG-IP, including Azure Network Security Groups, and Public IP Addresses.
 - **Access**: This template creates an Azure Managed User Identity, KeyVault, and secret used to set the admin password on the BIG-IP instances.
 - **BIG-IP**: This template creates the Microsoft Azure VM instance for F5 BIG-IP Virtual Edition provisioned with Local Traffic Manager (LTM) and Application Security Manager (ASM). Traffic flows from the BIG-IP VE instances and then to the application servers. The BIG-IP VE(s) are configured in single-NIC mode. The BIG-IP module template can be deployed separately from the example template provided here into an "existing" stack.
 

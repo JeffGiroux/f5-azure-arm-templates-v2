@@ -108,15 +108,16 @@
 		"secretName": "mySecret",
 		"userAssignedIdentityName": "[concat(variables('uniqueString'), '-secretIdentity')]",
 
-		"appNsg": "[variables('uniqueString')]",
-		"mgmtNsg": "[variables('uniqueString')]",
 		"numSubnets": 2,
 		"provisionPublicIPNetwork": true,
 		"restrictedSrcMgmtPort": "8443",
 		"virtualNetworkName": "[concat(variables('uniqueString'), '-vnet')]",
 		"vnetAddressPrefix": "10.0",
 
-		"numberPublicAppIPAddresses": 1,
+		"nsg0": [{"destinationPortRanges":["22","8443"],"sourceAddressPrefix":"[parameters('restrictedSrcMgmtAddress')]"},{"destinationPortRanges":["80","443"],"sourceAddressPrefix":"*"}],
+		"nsg1": [{"destinationPortRanges":["80","443"],"sourceAddressPrefix":"*"}],
+		"nsg2": [],
+		"numberPublicExternalIPAddresses": 1,
 		"numberPublicMgmtIPAddresses": 0,
 
 		"provisionApp": "[not(empty(parameters('appContainer')))]",
@@ -171,12 +172,7 @@
 					"contentVersion": "[variables('contentVersion')]"
 				},
 				"parameters": {
-					"appNsg":{ "value": "[variables('appNsg')]" },
-					"mgmtNsg":{ "value": "[variables('mgmtNsg')]" },
 					"numSubnets":{ "value": "[variables('numSubnets')]" },
-					"provisionPublicIP":{ "value": "[variables('provisionPublicIPNetwork')]" },
-					"restrictedSrcMgmtAddress":{ "value": "[parameters('restrictedSrcMgmtAddress')]" },
-					"restrictedSrcMgmtPort":{ "value": "[variables('restrictedSrcMgmtPort')]" },
 					"virtualNetworkName":{ "value": "[variables('virtualNetworkName')]" },
 					"vnetAddressPrefix":{ "value": "[variables('vnetAddressPrefix')]" },					
 					"tagValues":{ "value": "[parameters('tagValues')]" }
@@ -198,7 +194,10 @@
 				},
 				"parameters": {
 					"dnsLabel":{ "value": "[variables('uniqueString')]" },
-					"numberPublicAppIPAddresses":{ "value": "[variables('numberPublicAppIPAddresses')]" },
+					"nsg0":{ "value": "[variables('nsg0')]" },
+					"nsg1":{ "value": "[variables('nsg1')]" },
+					"nsg2":{ "value": "[variables('nsg2')]" },
+					"numberPublicExternalIPAddresses":{ "value": "[variables('numberPublicExternalIPAddresses')]" },
 					"numberPublicMgmtIPAddresses":{ "value": "[variables('numberPublicMgmtIPAddresses')]" },
 					"tagValues":{ "value": "[parameters('tagValues')]" }
 				}
@@ -224,7 +223,7 @@
 					"instanceName":{ "value": "[variables('appInstanceName')]" },
 					"instanceType":{ "value": "[variables('appInstanceType')]" },
 					"subnetId":{ "value": "[reference('networkTemplate').outputs.subnets.value[1]]" },
-					"nsgId":{ "value": "[reference('networkTemplate').outputs.appNSG.value]" },
+					"nsgId":{ "value": "[reference('publicIpTemplate').outputs.nsg1Id.value]" },
 					"appContainer":{ "value": "[parameters('appContainer')]" },
 					"cloudInitDeliveryLocation":{ "value": "[variables('cloudInitDeliveryLocation')]" },
 					"tagValues":{ "value": "[parameters('tagValues')]" }
@@ -253,8 +252,8 @@
 					"dnsLabel":{ "value": "[variables('uniqueString')]" },
 					"image":{ "value": "[variables('image')]" },
 					"instanceType":{ "value": "[variables('instanceType')]" },
-					"nsgId":{ "value": "[reference('networkTemplate').outputs.mgmtNSG.value]" },
-					"publicIPAddressId":{ "value": "[first(reference('publicIpTemplate').outputs.appIpIds.value)]" },
+					"nsgId":{ "value": "[reference('publicIpTemplate').outputs.nsg0Id.value]" },
+					"publicIPAddressId":{ "value": "[first(reference('publicIpTemplate').outputs.externalIpIds.value)]" },
 					"roleDefinitionId":{ "value": "[variables('roleDefinitionId')]" },
 					"runtimeConfig":{ "value": "[parameters('runtimeConfig')]" },
 					"sshKey":{ "value": "[parameters('sshKey')]" },
@@ -281,7 +280,7 @@
 		"appPublicIps": {
 			"condition": "[variables('provisionApp')]",
             "type": "array",
-            "value": "[reference('publicIpTemplate').outputs.appIps.value]"
+            "value": "[reference('publicIpTemplate').outputs.externalIps.value]"
         },
 		"appPrivateIp": {
 			"condition": "[variables('provisionApp')]",
