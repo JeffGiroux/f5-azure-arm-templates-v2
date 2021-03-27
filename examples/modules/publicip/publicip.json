@@ -203,7 +203,7 @@
             "location": "[resourceGroup().location]",
             "tags": "[if(empty(parameters('tagValues')), json('null'), parameters('tagValues'))]",
             "properties": {
-                "securityRules": "[union(variables('nsg1Array'), variables('outboundNsgRule'))]"
+                "securityRules": "[union(variables('nsg1Array'), )]"
             },
             "condition": "[not(empty(parameters('nsg1')))]"
         },
@@ -214,7 +214,7 @@
             "location": "[resourceGroup().location]",
             "tags": "[if(empty(parameters('tagValues')), json('null'), parameters('tagValues'))]",
             "properties": {
-                "securityRules": "[union(variables('nsg2Array'), variables('outboundNsgRule'))]"
+                "securityRules": "[union(variables('nsg2Array'), )]"
             },
             "condition": "[not(empty(parameters('nsg2')))]"
         },
