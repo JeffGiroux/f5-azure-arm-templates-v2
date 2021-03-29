@@ -129,7 +129,7 @@
 		"appInsightsId": "[resourceId('Microsoft.Insights/components', variables('appInsights'))]",
 		"customEmail": [],
 		"image": "f5-networks:f5-big-ip-best:f5-bigip-virtual-edition-25m-best-hourly:15.1.201000",
-		"instanceType": "Standard_DS3_v2",
+		"instanceType": "Standard_DS4_v2",
 		"roleDefinitionId": "",
 		"vmName": "[concat(variables('uniqueString'), '-vm')]"
     },

@@ -26,7 +26,7 @@ pre_onboard_enabled:
   - name: provision_rest
     type: inline
     commands:
-      - /usr/bin/setdb provision.extramb 1000
+      - /usr/bin/setdb provision.extramb 500
       - /usr/bin/setdb restjavad.useextramb true
       - '/usr/bin/curl -s -f -u admin: -H "Content-Type: application/json" -d ''{"maxMessageBodySize":134217728}'' -X POST http://localhost:8100/mgmt/shared/server/messaging/settings/8100 | jq .'
   - name: provision_modules
