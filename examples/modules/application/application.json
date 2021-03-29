@@ -184,7 +184,7 @@
 			"properties": {
 				"publisher": "Microsoft.Azure.Extensions",
 				"settings": {
-					"commandToExecute": "[concat('apt-get update -y; apt-get -y install docker.io; docker run --name f5demo -p 80:80 -p 443:443 -d ', parameters('appContainer'), '')]"
+					"commandToExecute": "[concat('sudo apt-get update -y; sudo apt-get -y install docker.io; sudo docker run --name f5demo -p 80:80 -p 443:443 -d ', parameters('appContainer'), '')]"
 				},
 				"type": "CustomScript",
 				"typeHandlerVersion": "2.0"
