@@ -1,15 +1,12 @@
 ---
 extension_packages:
   install_operations:
-    - extensionHash: 536eccb9dbf40aeabd31e64da8c5354b57d893286ddc6c075ecc9273fcca10a1
-      extensionType: do
-      extensionVersion: 1.16.0
-    - extensionHash: de615341b91beaed59195dceefc122932580d517600afce1ba8d3770dfe42d28
-      extensionType: as3
-      extensionVersion: 3.23.0
-    - extensionHash: 333e11a30ba88699ac14bc1e9546622540a5e889c415d5d53a8aeaf98f6f872e
-      extensionType: ts
-      extensionVersion: 1.15.0
+    - extensionType: do
+      extensionVersion: 1.19.0
+    - extensionType: as3
+      extensionVersion: 3.26.0
+    - extensionType: ts
+      extensionVersion: 1.18.0
 extension_services:
   service_operations:
     - extensionType: do
