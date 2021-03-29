@@ -75,6 +75,10 @@
 	"variables": {
 		"apiVersion": "2015-06-15",
 		"cloudInit": "[concat('#include\n',parameters('cloudInitDeliveryLocation'))]",
+		"customData": "[base64(concat('#!/bin/bash -x\n\napt-get update -y\napt-get -y install docker.io\ndocker run --name f5demo -p 80:80 -p 443:443 -d ', parameters('appContainer'), ''))]",
+		"extSettingsRef": {
+			"commandToExecute": "[concat('echo -e ', variables('customData'), ' > /var/lib/waagent/customData; bash -c \"base64 -d /var/lib/waagent/customData | bash\"')]"
+		},	  
 		"nicName": "[concat(variables('vmName'), '-nic')]",
 		"networkSecurityGroup": {
 			"id": "[parameters('nsgId')]"
@@ -184,7 +188,7 @@
 			"properties": {
 				"publisher": "Microsoft.Azure.Extensions",
 				"settings": {
-					"commandToExecute": "[concat('sudo apt-get update -y; sudo apt-get -y install docker.io; sudo docker run --name f5demo -p 80:80 -p 443:443 -d ', parameters('appContainer'), '')]"
+					"commandToExecute": "[variables('extSettingsRef')]"
 				},
 				"type": "CustomScript",
 				"typeHandlerVersion": "2.0"
