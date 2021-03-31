@@ -231,7 +231,8 @@ For information on getting started using F5's ARM templates on GitHub, see [Micr
 | uniqueString | Yes | A prefix that will be used to name template resources. Because some resources require globally unique names, we recommend using a unique value. |
 | sshKey | Yes | Supply the public key that will be used for SSH authentication to the BIG-IP and application virtual machines. Note: This should be the public key as a string, typically starting with **---- BEGIN SSH2 PUBLIC KEY ----** and ending with **---- END SSH2 PUBLIC KEY ----**. |
 | newPassword | No | The new password to be used for the admin user on the BIG-IP instances. This is required for creating the AZURE_PASSWORD secret referenced in the runtimeConfig template parameter. If this value is left blank, the access module template is not deployed. |
-| appContainer | No | The name of a container to download and install which is used for the example application server. If this value is left blank, the application module template is not deployed. |
+| appContainer | No | The name of a container to download and install which is used for the example application server. Parameter 'appContainer' or 'cloudInitDeliveryLocation' must exist in order to deploy the application module (aka app server). |
+| cloudInitDeliveryLocation | No | (PREFERRED) URI to cloud init file used for customizing VM. Parameter 'appContainer' or 'cloudInitDeliveryLocation' must exist in order to deploy the application module (aka app server). |
 | restrictedSrcMgmtAddress | Yes | When creating management security group, this field restricts management access to a specific network or address. Enter an IP address or address range in CIDR notation, or asterisk for all sources. |
 | runtimeConfig | Yes | Supply a URL to the bigip-runtime-init configuration file in YAML or JSON format, or an escaped JSON string to use for f5-bigip-runtime-init configuration. |
 | useAvailabilityZones | Yes | This deployment can deploy resources into Azure Availability Zones (if the region supports it).  If that is not desired the input should be set 'No'. If the region does not support availability zones the input should be set to No. |
@@ -331,7 +332,7 @@ As an alternative to deploying through the Azure Portal (GUI) each solution prov
 #### PowerShell Script Example
 
 ```powershell
-## Example Command: .\Deploy_via_PS.ps1 -templateBaseUrl https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/ -artifactLocation main/examples/ -sshKey <value> -uniqueString <value> -newPassword <value> -appContainer f5devcentral/f5-demo-app:1.0.1 -restrictedSrcMgmtAddress * -runtimeConfig https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/main/examples/standalone/bigip-configurations/runtime-init-conf.yaml -useAvailabilityZones <value> -zoneChoice <value>
+## Example Command: .\Deploy_via_PS.ps1 -templateBaseUrl https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/ -artifactLocation main/examples/ -sshKey <value> -uniqueString <value> -newPassword <value> -cloudInitDeliveryLocation https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/main/examples/modules/application/scripts/cloud-init.txt -restrictedSrcMgmtAddress * -runtimeConfig https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/main/examples/standalone/bigip-configurations/runtime-init-conf.yaml -useAvailabilityZones <value> -zoneChoice <value>
 ```
 
 =======
@@ -340,7 +341,7 @@ As an alternative to deploying through the Azure Portal (GUI) each solution prov
 
 ```bash
 ## Example Command: ./deploy_via_bash.sh 
---templateBaseUrl https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/ --artifactLocation main/examples/ --sshKey <value> --uniqueString <value> --newPassword <value> --appContainer f5devcentral/f5-demo-app:1.0.1 --restrictedSrcMgmtAddress * --runtimeConfig https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/main/examples/standalone/bigip-configurations/runtime-init-conf.yaml --useAvailabilityZones <value> -zoneChoice <value>
+--templateBaseUrl https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/ --artifactLocation main/examples/ --sshKey <value> --uniqueString <value> --newPassword <value> --cloudInitDeliveryLocation https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/main/examples/modules/application/scripts/cloud-init.txt --restrictedSrcMgmtAddress * --runtimeConfig https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/main/examples/standalone/bigip-configurations/runtime-init-conf.yaml --useAvailabilityZones <value> -zoneChoice <value>
 ```
 
 

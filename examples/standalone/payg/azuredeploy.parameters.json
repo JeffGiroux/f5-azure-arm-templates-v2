@@ -12,7 +12,10 @@
 			"value": "giroux1"
 		},
 		"appContainer": {
-			"value": "f5devcentral/f5-demo-app:1.0.1"
+			"value": ""
+		},
+		"cloudInitDeliveryLocation": {
+			"value": "https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/main/examples/modules/application/scripts/cloud-init.txt"
 		},
 		"runtimeConfig": {
 			"value": "https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/main/examples/standalone/bigip-configurations/runtime-init-conf-payg.yaml"

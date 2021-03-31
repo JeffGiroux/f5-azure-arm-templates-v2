@@ -37,9 +37,16 @@
 			"type": "securestring"
 		},
 		"appContainer": {
-			"defaultValue": "f5devcentral/f5-demo-app:1.0.1",
+			"defaultValue": "",
 			"metadata": {
 				"description": "The docker container to use when deploying the example application."
+			},
+			"type": "string"
+		},
+		"cloudInitDeliveryLocation": {
+			"defaultValue": "https://raw.githubusercontent.com/JeffGiroux/f5-azure-arm-templates-v2/main/examples/modules/application/scripts/cloud-init.txt",
+			"metadata": {
+				"description": "URI to cloud init file used for customizing VM"
 			},
 			"type": "string"
 		},
@@ -120,10 +127,8 @@
 		"numberPublicExternalIPAddresses": 1,
 		"numberPublicMgmtIPAddresses": 0,
 
-		"provisionApp": "[not(empty(parameters('appContainer')))]",
 		"appInstanceName": "appvm01",
 		"appInstanceType": "Standard_D2s_v3",
-		"cloudInitDeliveryLocation": "",
 
 		"appInsights": "[concat(variables('uniqueString'), '-insights')]",
 		"appInsightsId": "[resourceId('Microsoft.Insights/components', variables('appInsights'))]",
@@ -205,7 +210,7 @@
 		},
 		{
 			"type": "Microsoft.Resources/deployments",
-			"condition": "[variables('provisionApp')]",
+			"condition": "[variables('cloudInitDeliveryLocation')]",
 			"apiVersion": "[variables('deploymentApiVersion')]",
 			"name": "appTemplate",
 			"dependsOn": [
@@ -225,7 +230,7 @@
 					"subnetId":{ "value": "[reference('networkTemplate').outputs.subnets.value[1]]" },
 					"nsgId":{ "value": "[reference('publicIpTemplate').outputs.nsg1Id.value]" },
 					"appContainer":{ "value": "[parameters('appContainer')]" },
-					"cloudInitDeliveryLocation":{ "value": "[variables('cloudInitDeliveryLocation')]" },
+					"cloudInitDeliveryLocation":{ "value": "[parameters('cloudInitDeliveryLocation')]" },
 					"tagValues":{ "value": "[parameters('tagValues')]" }
 				}
 			}
