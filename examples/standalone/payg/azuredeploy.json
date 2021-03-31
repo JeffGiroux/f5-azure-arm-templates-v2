@@ -210,7 +210,7 @@
 		},
 		{
 			"type": "Microsoft.Resources/deployments",
-			"condition": "[variables('cloudInitDeliveryLocation')]",
+			"condition": "[parameters('cloudInitDeliveryLocation')]",
 			"apiVersion": "[variables('deploymentApiVersion')]",
 			"name": "appTemplate",
 			"dependsOn": [
