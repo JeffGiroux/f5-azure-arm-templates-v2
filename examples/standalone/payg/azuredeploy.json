@@ -127,6 +127,7 @@
 		"numberPublicExternalIPAddresses": 1,
 		"numberPublicMgmtIPAddresses": 0,
 
+		"provisionApp": "[not(empty(parameters('cloudInitDeliveryLocation')))]",
 		"appInstanceName": "appvm01",
 		"appInstanceType": "Standard_D2s_v3",
 
@@ -210,7 +211,7 @@
 		},
 		{
 			"type": "Microsoft.Resources/deployments",
-			"condition": "[parameters('cloudInitDeliveryLocation')]",
+			"condition": "[variables('provisionApp')]",
 			"apiVersion": "[variables('deploymentApiVersion')]",
 			"name": "appTemplate",
 			"dependsOn": [
