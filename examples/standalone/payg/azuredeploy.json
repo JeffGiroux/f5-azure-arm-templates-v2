@@ -115,7 +115,7 @@
 		"secretName": "mySecret",
 		"userAssignedIdentityName": "[concat(variables('uniqueString'), '-secretIdentity')]",
 
-		"numSubnets": 2,
+		"numSubnets": 3,
 		"provisionPublicIPNetwork": true,
 		"restrictedSrcMgmtPort": "8443",
 		"virtualNetworkName": "[concat(variables('uniqueString'), '-vnet')]",
@@ -124,7 +124,7 @@
 		"nsg0": [{"destinationPortRanges":["22","8443"],"sourceAddressPrefix":"[parameters('restrictedSrcMgmtAddress')]"},{"destinationPortRanges":["80","443"],"sourceAddressPrefix":"*"}],
 		"nsg1": [{"destinationPortRanges":["80","443"],"sourceAddressPrefix":"*"}],
 		"nsg2": [],
-		"numberPublicExternalIPAddresses": 1,
+		"numberPublicExternalIPAddresses": 3,
 		"numberPublicMgmtIPAddresses": 0,
 
 		"provisionApp": "[not(empty(parameters('cloudInitDeliveryLocation')))]",
